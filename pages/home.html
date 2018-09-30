@@ -45,14 +45,41 @@
 				<div class="uptimeDiv">
 					<div id="uptimeContainer"></div>
 					<div class="numDiv">
-						<span>14.85%</span>
+						<span>45.67%</span>
 						<small>More Visitors</small>
 					</div>
 				</div>
 				<div class="salesDiv">
 					<div id="salesContainer"></div>
 					<div class="numDiv">
-						<span>14.85%</span>
+						<span>10.98%</span>
+						<small>More Visitors</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="chartDiv">
+					<div id="chartContainer"></div>
+					<div class="numDiv">
+						<span>55.24%</span>
+						<small>More Visitors</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="speedDiv">
+					<div id="speedContainer"></div>
+					<div class="numDiv">
+						<span>34.98%</span>
+						<small>More Visitors</small>
+					</div>
+				</div>
+				<div class="rateDiv">
+					<div id="rateContainer"></div>
+					<div class="numDiv">
+						<span>5.88%</span>
 						<small>More Visitors</small>
 					</div>
 				</div>
@@ -66,6 +93,9 @@
 		drawVis();
 		drawUptime();
 		drawSales();
+		drawChart();
+		drawSpeed();
+		drawRate();
 		function drawSales(){
 			var chart = Highcharts.chart('salesContainer', {
 				credits:{
@@ -176,6 +206,247 @@
 				}]
 			});
 		}
+	    function drawChart(){
+			var chart = Highcharts.chart('chartContainer', {
+	            chart: {
+		            type: 'column',
+		            options3d: {
+			            enabled: true,
+			            alpha: 15,
+			            beta: 15,
+			            viewDistance: 25,
+			            depth: 40
+		            },
+		            marginTop: 80,
+		            marginRight: 40
+	            },
+	            legend: {
+		            enabled: false
+	            },
+	            credits: {
+		            enabled: false
+	            },
+	            title: {
+		            text: ''
+	            },
+	            xAxis: {
+		            categories: ['苹果', '橘子', '梨', '葡萄', '香蕉'],
+	                visible: false
+	            },
+	            yAxis: {
+		            allowDecimals: false,
+		            min: 0,
+		            title: {
+			            text: '水果数量'
+		            },
+		            visible: false
+	            },
+	            tooltip: {
+		            headerFormat: '<b>{point.key}</b><br>',
+		            pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+	            },
+	            plotOptions: {
+		            column: {
+			            stacking: 'normal',
+			            depth: 40
+		            }
+	            },
+	            series: [{
+		            name: '小张',
+		            data: [5, 3, 4, 7, 2],
+		            stack: 'male'
+	            }, {
+		            name: '小王',
+		            data: [3, 4, 4, 2, 5],
+		            stack: 'male'
+	            }, {
+		            name: '小彭',
+		            data: [2, 5, 6, 2, 1],
+		            stack: 'female'
+	            }, {
+		            name: '小潘',
+		            data: [3, 0, 4, 4, 3],
+		            stack: 'female'
+	            }]
+              });
+            }
+        function drawSpeed(){
+		         Highcharts.setOptions({
+	         global: {
+		         useUTC: false
+	         }
+         });
+         function activeLastPointToolip(chart) {
+	         var points = chart.series[0].points;
+	         chart.tooltip.refresh(points[points.length -1]);
+         }
+         var chart = Highcharts.chart('speedContainer', {
+	         chart: {
+		         type: 'spline',
+		         marginRight: 10,
+		         events: {
+			         load: function () {
+				         var series = this.series[0],
+					         chart = this;
+				         activeLastPointToolip(chart);
+				         setInterval(function () {
+					         var x = (new Date()).getTime(), // 当前时间
+						         y = Math.random();          // 随机值
+					         series.addPoint([x, y], true, true);
+					         activeLastPointToolip(chart);
+				         }, 1000);
+			         }
+		         }
+	         },
+	         title: {
+		         text: ''
+	         },
+	         credits: {
+		         enabled: false
+	         },
+	         xAxis: {
+		         type: 'datetime',
+		         tickPixelInterval: 150,
+		         visible: false
+	         },
+	         yAxis: {
+		         title: {
+			         text: null
+		         },
+		         visible: false
+	         },
+	         tooltip: {
+		         formatter: function () {
+			         return '<b>' + this.series.name + '</b><br/>' +
+				         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+				         Highcharts.numberFormat(this.y, 2);
+		         }
+	         },
+	         legend: {
+		         enabled: false
+	         },
+	         series: [{
+		         name: '随机数据',
+		         data: (function () {
+			         // 生成随机值
+			         var data = [],
+				         time = (new Date()).getTime(),
+				         i;
+			         for (i = -19; i <= 0; i += 1) {
+				         data.push({
+					         x: time + i * 1000,
+					         y: Math.random()
+				         });
+			         }
+			         return data;
+		         }())
+	         }]
+         });
+		}
+		function drawRate(){
+		    var chart = Highcharts.chart('rateContainer',{
+	        chart: {
+		        type: 'gauge',
+		        plotBackgroundColor: null,
+		        plotBackgroundImage: null,
+		        plotBorderWidth: 0,
+		        plotShadow: false
+	        },
+	        title: {
+		        text: ''
+	        },
+	        credits: {
+		        enabled: false
+	        },
+	        pane: {
+		        startAngle: -150,
+		        endAngle: 150,
+		        background: [{
+			        backgroundColor: {
+				        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+				        stops: [
+					        [0, '#FFF'],
+					        [1, '#333']
+				        ]
+			        },
+			        borderWidth: 0,
+			        outerRadius: '109%'
+		        }, {
+			        backgroundColor: {
+				        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+				        stops: [
+					        [0, '#333'],
+					        [1, '#FFF']
+				        ]
+			        },
+			        borderWidth: 1,
+			        outerRadius: '107%'
+		        }, {
+			        // default background
+		        }, {
+			        backgroundColor: '#DDD',
+			        borderWidth: 0,
+			        outerRadius: '105%',
+			        innerRadius: '103%'
+		        }]
+	        },
+	        // the value axis
+	        yAxis: {
+		        min: 0,
+		        max: 200,
+		        minorTickInterval: 'auto',
+		        minorTickWidth: 1,
+		        minorTickLength: 10,
+		        minorTickPosition: 'inside',
+		        minorTickColor: '#666',
+		        tickPixelInterval: 30,
+		        tickWidth: 2,
+		        tickPosition: 'inside',
+		        tickLength: 10,
+		        tickColor: '#666',
+		        labels: {
+			        step: 2,
+			        rotation: 'auto'
+		        },
+		        title: {
+			        text: 'km/h'
+		        },
+		        plotBands: [{
+			        from: 0,
+			        to: 120,
+			        color: '#55BF3B' // green
+		        }, {
+			        from: 120,
+			        to: 160,
+			        color: '#DDDF0D' // yellow
+		        }, {
+			        from: 160,
+			        to: 200,
+			        color: '#DF5353' // red
+		        }]
+	            },
+	            series: [{
+		            name: 'Speed',
+		            data: [80],
+		            tooltip: {
+			            valueSuffix: ' km/h'
+		            }
+	            }]
+            }, function (chart) {
+	            if (!chart.renderer.forExport) {
+		            setInterval(function () {
+			            var point = chart.series[0].points[0],
+				            newVal,
+				            inc = Math.round((Math.random() - 0.5) * 20);
+			            newVal = point.y + inc;
+			            if (newVal < 0 || newVal > 200) {
+				            newVal = point.y - inc;
+			            }
+			            point.update(newVal);
+		            }, 3000);
+	            }
+            });
+		}
 	});
 </script>
 <style>
@@ -227,10 +498,17 @@
 		height: 230px;
 		margin-top: 10px;
 	}
-	.visDiv,.uptimeDiv,.salesDiv{
+	#speedContainer,#rateContainer{
+		height: 195px;
+		margin-top:10px;
+	}
+	.chartDiv{
+		margin-top:10px;
+	}
+	.visDiv,.uptimeDiv,.salesDiv,.chartDiv,.speedDiv,.rateDiv{
 		position: relative;
 	}
-	.visDiv .numDiv,.uptimeDiv .numDiv,.salesDiv .numDiv{
+	.visDiv .numDiv,.uptimeDiv .numDiv,.salesDiv .numDiv,.chartDiv .numDiv,.speedDiv .numDiv,.rateDiv .numDiv{
 		position: absolute;
 		top:20px;
 		left: 20px;
@@ -246,92 +524,3 @@
 		height: 110px;
 	}
 </style>
-
-
-
-<!-- <div id="home">
-	home页面
-	<div class="switch">
-      <input type="checkbox"/>
-    </div>
-    <div id="homeContainer"></div>
-</div>
-<script>
-	$(function(){
-		$('#home input[type=checkbox]').bootstrapSwitch('state',false);
-		$("#home").on({
-			'switchChange.bootstrapSwitch':function (event,state) {
-		          alert(state);
-		          // 点击修改之后，向后台传递参数
-		      }
-		},'[type=checkbox]');
-		// 变量声明和函数声明都会提前，并且变量声明提前到最前边，然后是函数声明。
-		//函数声明提前 
-		/*var a;
-		function a(){}*/
-		/*console.log(a);
-		var a = 1;
-		function a(){}
-		console.log(a);*/
-		draw();
-		function draw(){
-			// 绘制
-			var chart = Highcharts.chart('homeContainer', {
-				chart:{
-					margin:[0,0,0,0],
-				},
-				credits:{
-					enabled:false,
-				},
-				colors:['red','#00ff00'],
-				title: {
-					text: ''
-				},
-				xAxis: {
-					visible:false,
-				},
-				yAxis: {
-					visible:false,
-					title: {
-						text: ''
-					}
-				},
-				legend: {
-					floating:true,
-					layout: 'vertical',
-					align: 'right',
-					verticalAlign: 'top'
-				},
-				plotOptions: {
-					series: {
-						label: {
-							connectorAllowed: false
-						},
-						pointStart: 2010
-					}
-				},
-				series: [{
-					name: '安装，实施人员',
-					data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-				}, {
-					name: '工人',
-					data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-				}]
-			});
-		}
-
-
-
-
-
-	});
-</script>
-<style>
-	#home{
-		color: red;
-	}
-	#homeContainer{
-		width: 400px;
-		height: 200px;
-	}
-</style> -->
